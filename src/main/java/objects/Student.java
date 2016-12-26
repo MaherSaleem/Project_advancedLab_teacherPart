@@ -3,6 +3,7 @@ package objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class Student {
 
@@ -51,6 +52,7 @@ public class Student {
 	public static void main(String[] args) {
 		Student student = new Student(1130258, "Maher", "1");
 		student.toJson();
+
 	}
 	
 	

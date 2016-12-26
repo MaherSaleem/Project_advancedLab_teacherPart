@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,8 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.JOptionPane;
 
-import database.maherDatabase;
+import database.StudentTable;
 import objects.Student;
 
 @RestController
@@ -26,8 +29,9 @@ public class StudentControllers {
 	Student ErrorStudnet = new Student(-5, "EXCEPTION", "");
 
 	@RequestMapping(value = "/testMyApp", method = RequestMethod.GET)
-	public String test() throws ClassNotFoundException {
-		return "Awsome, its working";
+	public String test() throws ClassNotFoundException, SQLException {
+		return "awsome";
+
 	}
 
 	@RequestMapping(value = "/students", method = RequestMethod.GET)
@@ -35,8 +39,8 @@ public class StudentControllers {
 
 		ArrayList<Student> list = new ArrayList<Student>();
 		try {
-			maherDatabase db = new maherDatabase();
-			Statement s = maherDatabase.getConnection();
+			StudentTable db = new StudentTable();
+			Statement s = StudentTable.getConnection();
 
 			ResultSet rs = s.executeQuery("select * from " + db.STUDENT_TABLE);
 
@@ -65,11 +69,11 @@ public class StudentControllers {
 	 */
 	@RequestMapping(value = "/students/{id}", method = RequestMethod.GET)
 	public Student handlePassedParams(@PathVariable("id") int id) {
-		maherDatabase db;
+		StudentTable db;
 		String result = "";
 		try {
-			db = new maherDatabase();
-			Statement s = maherDatabase.getConnection();
+			db = new StudentTable();
+			Statement s = StudentTable.getConnection();
 			ResultSet rs = s
 					.executeQuery("select * from " + db.STUDENT_TABLE + "  WHERE " + db.STUDENT_COLUMN_ID + " = " + id);
 			if (!rs.next())
@@ -95,16 +99,16 @@ public class StudentControllers {
 		
 		HashMap<String, String> response = new HashMap<String, String>();
 		try {
-			maherDatabase db = new maherDatabase();
+			StudentTable db = new StudentTable();
 			
 			// get the data from request
 			int id = Integer.parseInt(request.getParameter("id"));
 			String name = request.getParameter(db.STUDENT_COLUMN_NAME);
 			String password = request.getParameter(db.STUDENT_COLUMN_PASSWORD);
-			
+			System.out.println(id + " " + name + " " + password);
 			Student student = new Student(id , name , password);
 			db.addStudent(student);
-			response.put("msg", "student added successfully");
+			response.put("msg", "student added successfully");  
 		} catch (Exception e) {
 			response.put("msg", "failed");
 			e.printStackTrace();
