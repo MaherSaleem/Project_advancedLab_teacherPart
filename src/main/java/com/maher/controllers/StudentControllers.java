@@ -33,7 +33,11 @@ public class StudentControllers {
 		return "awsome";
 
 	}
-
+	
+	
+	/*
+	 * get A list of all students
+	 */
 	@RequestMapping(value = "/students", method = RequestMethod.GET)
 	public ArrayList<Student> getAllStudents() throws ClassNotFoundException {
 
@@ -110,11 +114,12 @@ public class StudentControllers {
 			db.addStudent(student);
 			response.put("msg", "student added successfully");  
 		} catch (Exception e) {
-			response.put("msg", "failed");
+			response.put("msg", "failed, may be duplicate ID");
 			e.printStackTrace();
 		}
 		return response;
 
 	}
+	
 
 }

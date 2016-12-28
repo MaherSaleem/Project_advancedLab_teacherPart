@@ -63,21 +63,18 @@ public class StudentTable {
 		}
 	}
 
-	public boolean addStudent(Student s) {
+	public boolean addStudent(Student s) throws Exception {
 		int id = s.getId();
 		String name = s.getName();
 		String password = s.getPassword();
 
 		int result = 0;
-		try {
 			String inseartQuery = String.format("insert into "+STUDENT_TABLE+" values(%d, '%s' , '%s')", id, name, password);
 			System.out.println(inseartQuery);
 			result = statement.executeUpdate(inseartQuery);
-		} catch (SQLException e) {
-			e.printStackTrace();
 			System.out.println("failed to add stuednt");
 
-		}
+		
 		return result != -1;
 	}
 
