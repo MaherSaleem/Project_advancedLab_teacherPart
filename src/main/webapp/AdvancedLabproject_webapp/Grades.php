@@ -1,3 +1,4 @@
+<?php include_once "conntecting.php"?>
 
 <head>
     <link rel="stylesheet" type="text/css" href="css_for_main_page.css">
@@ -19,13 +20,17 @@
     }</style>
 
 <ul class="nav nav-pills">
-    <li class="active"><a href="#">Home</a></li>
+    <li ><a href="main_page.php">Home</a></li>
     <li><a href="Add_student.php">new Stdent</a></li>
-    <li ><a href="Quiz.php">New Quiz</a></li>
-    <li ><a href="Grades.php">Grades</a></li>
+    <li ><a href="Quiz.php">Quiz</a></li>
+    <li class="active"><a href="Grades.php">Grades</a></li>
 
     </li>
 </ul>
+<div class="row">
+  <div class="col-sm-6">
+<div class="list-group">
+<br>
 <?php
 /**
  * Created by PhpStorm.
@@ -34,8 +39,12 @@
  * Time: 3:06 PM
  */
 
-$json = file_get_contents('http://localhost:8080/Project/quizes'); // this WILL do an http request for you
+
+$json = file_get_contents('http://'.$IP.':8080/Project/quizes'); // this WILL do an http request for you
 $data = json_decode($json, true);
 for ($i = 0; $i < sizeof($data); $i++) {
-    echo "<li><a href='ViewGradesForQuiz.php?qid=".$data[$i]['qid'] ."'>quiz" . $data[$i]['qid'] . "</a></li><br>";
+    echo "<a class='list-group-item' href='ViewGradesForQuiz.php?qid=".$data[$i]['qid'] ."'>Quiz" . $data[$i]['qid'] . "</a>";
 }
+?>
+</div>
+</div>

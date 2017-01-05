@@ -9,11 +9,10 @@ public class Quiz {
 	int qid;
 	String startTime;
 	String duration ; //in seconds
-	ArrayList<Question> questions;
 	
 	
-	
-	public Quiz(int qid, String startTime, String duration) {
+	@JsonCreator
+	public Quiz(@JsonProperty("qid")int qid,@JsonProperty("startTime") String startTime,@JsonProperty("duration") String duration) {
 		super();
 		this.qid = qid;
 		this.startTime = startTime;

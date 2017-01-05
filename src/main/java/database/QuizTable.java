@@ -143,4 +143,21 @@ public class QuizTable {
 		}
 
 	}
+	
+
+	/*
+	 * this method is used to extends the time of  a quiz
+	 */
+	public void extendsQuiz(int quizId , String newTime) {
+		
+		String query = " UPDATE quiz SET duration='"+ newTime+"' WHERE qid = " + quizId; 
+		System.out.println(query);
+		try {
+			 statement.executeUpdate(query);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

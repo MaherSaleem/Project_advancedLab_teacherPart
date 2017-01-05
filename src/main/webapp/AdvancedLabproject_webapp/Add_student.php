@@ -1,3 +1,5 @@
+<?php include_once "conntecting.php"?>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css_for_main_page.css">
     <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
@@ -36,15 +38,15 @@
     }</style>
 
 <ul class="nav nav-pills">
-    <li class="active"><a href="#">Home</a></li>
-    <li><a href="Add_student.php">new Stdent</a></li>
-    <li><a href="Quiz.php">New Quiz</a></li>
+    <li ><a href="main_page.php">Home</a></li>
+    <li class="active"><a href="Add_student.php">new Stdent</a></li>
+    <li><a href="Quiz.php">Quiz</a></li>
     <li><a href="Grades.php">Grades</a></li>
 
     </li>
 </ul>
 <div class="view">
-    <div class="jumbotron" contenteditable="true">
+    <div class="well well-sm" contenteditable="true">
 
         <h1>Add new Student</h1>
         <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
@@ -52,7 +54,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <form method="post" action="http://localhost:8080/Project/students">
+                        <form method="post" action="http://<?php echo $IP ?>:8080/Project/students">
                             <div class="form-group ">
                                 <label class="control-label requiredField" for="id">
                                     Student Id

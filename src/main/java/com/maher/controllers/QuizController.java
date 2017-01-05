@@ -79,6 +79,31 @@ public class QuizController {
 	}
 
 	/*
+	 * get all quiz info
+	 */
+	@RequestMapping(value = "/quizes/info/{id}", method = RequestMethod.GET)
+	public Quiz getQuizInfo(@PathVariable("id") int id) {
+		QuizTable db;
+		Quiz q = null;
+		try {
+			db = new QuizTable();
+			Statement s = QuizTable.getConnection();
+			System.out.println("Select * from "+db.Quiz_TABLE + " WHERE " + db.Quiz_COLUMN_ID +" = "  +id);
+			ResultSet rs = s.executeQuery("Select * from "+db.Quiz_TABLE + " WHERE " + db.Quiz_COLUMN_ID +" = "  +id );
+			while (rs.next()) {
+				System.out.println("YAA");
+				q = new Quiz(rs.getInt(QuizTable.Quiz_COLUMN_ID),
+						rs.getString(db.Quiz_COLUMN_START_TIME ) ,
+						rs.getString(db.Quiz_COLUMN_DURATION));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return q;
+
+	}
+
+	/*
 	 * add new qustion for particular quiz
 	 */
 	@RequestMapping(value = "/quizes/qustion", method = RequestMethod.POST)
@@ -96,7 +121,7 @@ public class QuizController {
 					request.getParameter(QuizTable.QUESTIONS_COLUMN_ANS3),
 					Integer.parseInt(request.getParameter(QuizTable.QUESTIONS_COLUMN_CORRECT)));
 			db.addQuestion(q);
-			response.put("msg", "student added successfully");
+			response.put("msg", "Question added successfully");
 		} catch (Exception e) {
 			response.put("msg", "failed");
 			e.printStackTrace();
@@ -136,8 +161,8 @@ public class QuizController {
 	/*
 	 * get all active quizes(but assuming there is one active quiz)
 	 */
-	@RequestMapping(value = "/quizes/active", method = RequestMethod.GET)
-	public ArrayList<Quiz> getActiveQuizes() throws ClassNotFoundException {
+	@RequestMapping(value = "/quizes/active/{stu_id}", method = RequestMethod.GET)
+	public ArrayList<Quiz> getActiveQuizes(@PathVariable("stu_id") int stu_id) throws ClassNotFoundException {
 
 		ArrayList<Quiz> list = new ArrayList<Quiz>();
 		try {
@@ -145,7 +170,11 @@ public class QuizController {
 			Statement s = QuizTable.getConnection();
 
 			ResultSet rs = s.executeQuery(
-					"SELECT * from quiz q WHERE CURRENT_TIMESTAMP() >q.s_time AND CURRENT_TIMESTAMP() < q.duration");
+					"SELECT q.qid,q.s_time,q.duration from quiz q , grades g"
+					+ " WHERE q.qid=g.quiz_id AND "
+					+ "g.stu_id="+stu_id +" AND"
+					+ " g.finished=0 "
+					+ "AND CURRENT_TIMESTAMP() >q.s_time AND CURRENT_TIMESTAMP() < q.duration");
 
 			while (rs.next()) {
 				int qid = rs.getInt(db.Quiz_COLUMN_ID);
@@ -220,5 +249,24 @@ public class QuizController {
 		return response;
 
 	}
+	
+	// Extends Time for quiz
+	@RequestMapping(value = "/quizes/extends", method = RequestMethod.POST)
+	public HashMap<String, String> extendsquiz(HttpServletRequest request) {
+		int quiz_id = Integer.parseInt(request.getParameter("quiz_id"));
+		String newTime = request.getParameter("newTime");
+		HashMap<String, String> response = new HashMap<String, String>();
+		try {
+			QuizTable db = new QuizTable();
+			db.extendsQuiz(quiz_id, newTime);
+			response.put("status", "Changed Successfully");
+		} catch (Exception e) {
+			response.put("status", "Error in Changed");
+			e.printStackTrace();
+		}
+		return response;
+
+	}
+
 
 }

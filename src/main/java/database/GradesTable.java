@@ -104,7 +104,7 @@ public class GradesTable {
 			}
 			for(Integer i : ids){
 				System.out.println(i);
-				Query = String.format("INSERT INTO grades VALUES ('%d', '%d', '0')", i, quiz_id);
+				Query = String.format("INSERT INTO grades VALUES ('%d', '%d', '0' , '0')", i, quiz_id);
 				statement.executeUpdate(Query);
 			}
 
@@ -119,12 +119,12 @@ public class GradesTable {
 	 * this funtion used to set a grade for particaular student in particular quiz
 	 */
 	public void setGrade(int studentId , int QuizId , double grade){
-		String query = String.format("UPDATE grades SET  grade='%.2f' WHERE stu_id = '%d' AND quiz_id = '%d'", grade,studentId , QuizId  );
+		String query = String.format("UPDATE grades SET  grade='%.2f' , finished=1 WHERE stu_id = '%d' AND quiz_id = '%d'", grade,studentId , QuizId  );
 		try {
 			int affectedRows= statement.executeUpdate(query);
 			System.out.println(affectedRows);
 			if (affectedRows == 0){
-				query = String.format("INSERT INTO grades VALUES ('%d', '%d', '%.2f')", studentId, QuizId , grade);
+				query = String.format("INSERT INTO grades VALUES ('%d', '%d', '%.2f' ,1)", studentId, QuizId , grade);
 				statement.executeUpdate(query);
 			}
 		} catch (SQLException e) {

@@ -1,6 +1,7 @@
 <!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
 
 <!-- Inline CSS based on choices in "Settings" tab -->
+<?php include_once "conntecting.php"?>
 <head>
     <link rel="stylesheet" type="text/css" href="css_for_main_page.css">
     <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
@@ -27,12 +28,15 @@
 </head>
 
 <ul class="nav nav-pills">
-    <li class="active"><a href="#">Home</a></li>
+    <li ><a href="main_page.php">Home</a></li>
     <li><a href="Add_student.php">new Stdent</a></li>
-    <li><a href="Quiz.php">New Quiz</a></li>
+    <li class="active" ><a href="Quiz.php">Quiz</a></li>
     <li><a href="Grades.php">Grades</a></li>
 
 </ul>
+<div class="row">
+  <div class="col-sm-6">
+
 <div class="view" >
 <div class="jumbotron" contenteditable="true">
     <h1>Add new Quiz</h1>
@@ -42,7 +46,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <form method="post" action="http://localhost:8080/Project/quizes">
+                    <form method="post" action="http://<?php echo $IP ?>:8080/Project/quizes">
                         <div class="form-group ">
                             <label class="control-label requiredField" for="qid">
                                 Quiz Id
@@ -85,14 +89,23 @@
     </div>
 </div>
 </div>
-<h1>Add new Question for particular Quiz</h1>
+</div>
+<div class="col-sm-6">
+<div class="view" >
+<div class="well well-sm" contenteditable="true">
+
+<h3>Edit Quiz</h3>
+</div>
+<div class="list-group">
 
 <?php
 //http://stackoverflow.com/questions/15043981/how-to-access-json-decoded-array-in-php
-$json = file_get_contents('http://localhost:8080/Project/quizes'); // this WILL do an http request for you
+$json = file_get_contents('http://'.$IP.':8080/Project/quizes'); // this WILL do an http request for you
 $data = json_decode($json, true);
 for ($i = 0; $i < sizeof($data); $i++) {
-    echo "<li><a href='add_question.php?qid=" . $data[$i]['qid'] . "'>quiz" . $data[$i]['qid'] . "</a></li><br>";
+    echo "<a class='list-group-item' href='add_question.php?qid=" . $data[$i]['qid'] . "'>quiz" . $data[$i]['qid'] . "</a>";
 }
 ?>
-
+</div>
+</div></div>
+</div>

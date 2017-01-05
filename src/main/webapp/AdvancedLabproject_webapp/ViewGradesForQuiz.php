@@ -1,3 +1,4 @@
+<?php include_once "conntecting.php"?>
 
 <head>
     <link rel="stylesheet" type="text/css" href="css_for_main_page.css">
@@ -25,40 +26,57 @@
 </head>
 
 <ul class="nav nav-pills">
-    <li class="active"><a href="#">Home</a></li>
+    <li ><a href="main_page.php">Home</a></li>
     <li><a href="Add_student.php">new Stdent</a></li>
-    <li><a href="Quiz.php">New Quiz</a></li>
-    <li><a href="Grades.php">Grades</a></li>
+    <li><a href="Quiz.php">Quiz</a></li>
+    <li class="active"><a href="Grades.php">Grades</a></li>
 
 </ul>
+
+<div class="container">
 <?php
-/**
- * Created by PhpStorm.
- * User: Maher
- * Date: 12/27/2016
- * Time: 3:08 PM
- */
-
-
 $quizId = $_GET["qid"];
-echo "<h1>Grades for Quiz" . $quizId . "</h1>";
+echo "<h2>Grades for Quiz" . $quizId . "</h2>";
+?>
 
-$json = file_get_contents('http://localhost:8080/Project/grades/quiz/' . $quizId); // this WILL do an http request for you
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Grade</th>
+      </tr>
+     </thead>
+    <tbody>
+
+<?php
+
+$json = file_get_contents('http://'.$IP.':8080/Project/grades/quiz/' . $quizId); // this WILL do an http request for you
 $data = json_decode($json, true);
 $sum = 0;
 $max = -1;
 $min = 100;
+
 for ($i = 0; $i < sizeof($data); $i++) {
-    echo "<h3>".$data[$i]["stu_id"] . " " . $data[$i]["stu_name"] . " "   . $data[$i]["grade"]*100 . "</h3>" ;
+	echo "<tr>";
+    echo "<td>".$data[$i]["stu_id"] . "</td> " ."<td>". $data[$i]["stu_name"] . "</td> "   . "<td>".$data[$i]["grade"]*100 . "</td>" ;
     $sum +=$data[$i]["grade"]*100;
     if($data[$i]["grade"]*100 > $max) $max = $data[$i]["grade"]*100;
     if($data[$i]["grade"]*100 < $min) $min = $data[$i]["grade"]*100;
-
+    echo "</tr>";
 }
+?>
+    </tbody>
+  </table>
+
+  <?php
+
 echo "<br><br>";
-echo "<h3>avg is " . $sum/sizeof($data) . "</h3>";
-echo "<h3>max is $max </h3>";
-echo "<h3>min is $min </h3>";
+echo "<table class='table table-striped'><thead><tr>";
+echo "<td>Avg</td>";
+echo "<td>max </td>";
+echo "<td>min </td></tr></thead>";
+echo "<tr><td> ". $sum/sizeof($data) ."</td><td>$max</td><td>$min</td></tr>";
+echo "</table>";
 
-
-
+?>
